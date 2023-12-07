@@ -8,7 +8,6 @@ const eventRoute = require("./Routes/events");
 const materialRoute = require("./Routes/materials");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
-const crypto = require("crypto");
 
 mongoose.set("strictQuery", true);
 const connectDB = async () => {
@@ -21,21 +20,19 @@ const connectDB = async () => {
   }
 };
 
-connectDB();
-
-
 //init middleware
 
 // Increase the payload size limit (e.g., 50MB)
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 app.use("/api/auth", authRoute);
 app.use("/api/event", eventRoute);
 app.use("/api/material", materialRoute);
 
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+connectDB().then(() => {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
