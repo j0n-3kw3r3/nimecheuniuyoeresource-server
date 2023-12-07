@@ -38,4 +38,4 @@ app.use("/api/event", eventRoute);
 app.use("/api/material", materialRoute);
 
 
-app.listen(PORT, () => console.log(`Server running on port ${port}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
