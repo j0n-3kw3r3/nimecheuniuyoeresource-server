@@ -8,6 +8,7 @@ const eventRoute = require("./Routes/events");
 const materialRoute = require("./Routes/materials");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
+const cors = require('cors');
 
 mongoose.set("strictQuery", true);
 const connectDB = async () => {
@@ -20,6 +21,8 @@ const connectDB = async () => {
   }
 };
 
+// Enable CORS for all routes
+app.use(cors());
 //init middleware
 
 // Increase the payload size limit (e.g., 50MB)
