@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const PORT = process.env.PORT || 8080;
 const authRoute = require("./Routes/auth");
 const eventRoute = require("./Routes/events");
+const countRoute = require("./Routes/counter");
 const materialRoute = require("./Routes/materials");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
@@ -35,6 +36,7 @@ app.use(methodOverride("_method"));
 app.use("/api/auth", authRoute);
 app.use("/api/event", eventRoute);
 app.use("/api/material", materialRoute);
+app.use("/api/count", countRoute);
 
 connectDB().then(() => {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
