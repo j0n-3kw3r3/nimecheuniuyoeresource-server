@@ -39,7 +39,9 @@ router.post("/login", async (req, res) => {
   // check if user exsits
   const user = await User.findOne({ username });
   if (!user) {
-    res.status(400);
+    res.status(400).json({
+      message: "User does not exist",
+    });
     throw new Error("Invalid credentials");
   } else {
     const isMatch = await bcrypt.compare(password, user.password);
@@ -50,7 +52,9 @@ router.post("/login", async (req, res) => {
         
       });
     } else {
-      res.status(400);
+      res.status(400).json({
+        message: "Invalid credentials",
+      });
       throw new Error("Invalid credentials");
     }
   }
