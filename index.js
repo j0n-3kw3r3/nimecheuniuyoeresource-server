@@ -34,13 +34,11 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.urlencoded({ extended: true }));
 
- 
 app.use(methodOverride("_method"));
 app.use("/api/auth", authRoute);
 app.use("/api/event", eventRoute);
 app.use("/api/material", materialRoute);
 app.use("/api/count", countRoute);
-
 
 connectDB().then(() => {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

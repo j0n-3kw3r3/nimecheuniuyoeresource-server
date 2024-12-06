@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../Models/UserModel");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 // reqistration
 router.post("/signup", async (req, res) => {
@@ -27,24 +28,40 @@ router.post("/signup", async (req, res) => {
 });
 
 // login
+
 router.post("/login", async (req, res) => {
-  try {
-    // get user
-    const user = await User.findOne({
-      username: req.body.username,
-    });
-    if (!user) {
-      return res.status(404).json("user not found");
-    }
+  const { username, password } = req.body;
+  if (!username || !password) {
+    res.status(400);
+    throw new Error("Please add all fields");
+  }
 
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) {
-      return res.status(400).json("wrong password");
+  // check if user exsits
+  const user = await User.findOne({ username });
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid credentials");
+  } else {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
+      res.status(200).json({
+        role: "admin",
+        token: generateToken(user._id),
+        
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid credentials");
     }
-
-    return res.json(user);
-  } catch (error) {
-    return res.status(500).json(error);
   }
 });
+
+// Generate token
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
+};
+
+
 module.exports = router;
